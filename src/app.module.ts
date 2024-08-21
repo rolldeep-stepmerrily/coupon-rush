@@ -6,6 +6,7 @@ import { BullModule } from '@nestjs/bull';
 import { PrismaModule } from './prisma/prisma.module';
 import { HttpLoggerMiddleware } from './common/middlewares';
 import { CouponsModule } from './coupons/coupons.module';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { CouponsModule } from './coupons/coupons.module';
       inject: [ConfigService],
     }),
     CouponsModule,
+    RedisModule,
   ],
 })
 export class AppModule implements NestModule {

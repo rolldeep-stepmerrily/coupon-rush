@@ -15,4 +15,14 @@ export class CouponsRepository {
       throw new InternalServerErrorException();
     }
   }
+
+  async deleteAllCoupons() {
+    try {
+      return await this.prismaService.coupon.deleteMany({});
+    } catch (e) {
+      console.error(e);
+
+      throw new InternalServerErrorException();
+    }
+  }
 }

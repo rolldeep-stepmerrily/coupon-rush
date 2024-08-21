@@ -20,6 +20,9 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@bull-board/api": "^5.21.4",
+    "@bull-board/express": "^5.21.4",
+    "@faker-js/faker": "^8.4.1",
     "@nestjs/bull": "^10.2.0",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.3",
@@ -29,6 +32,7 @@
     "@nestjs/swagger": "^7.4.0",
     "@prisma/client": "^5.18.0",
     "@types/ioredis": "^5.0.0",
+    "axios": "^1.7.4",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "helmet": "^7.1.0",

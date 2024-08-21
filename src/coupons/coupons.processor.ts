@@ -1,8 +1,8 @@
 import { Process, Processor } from '@nestjs/bull';
-
-import { CouponsService } from './coupons.service';
 import { Job } from 'bull';
 import { InternalServerErrorException } from '@nestjs/common';
+
+import { CouponsService } from './coupons.service';
 
 @Processor('coupons')
 export class CouponsProcessor {

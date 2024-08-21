@@ -1,12 +1,16 @@
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import helmet from 'helmet';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ExpressAdapter } from '@bull-board/express';
+import { Queue } from 'bull';
+import { createBullBoard } from '@bull-board/api';
+import { BullAdapter } from '@bull-board/api/bullAdapter';
 
 import { AppModule } from './app.module';
 import { TransformInterceptor } from './common/interceptors';
 import { ValidationPipe } from '@nestjs/common';
 import { HttpExceptionFilter } from './common/filters';
-import helmet from 'helmet';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 const { NODE_ENV, PORT } = process.env;
 
@@ -49,6 +53,15 @@ async function bootstrap() {
       tryItOutEnabled: true,
     },
   });
+
+  const serverAdapter = new ExpressAdapter();
+  serverAdapter.setBasePath('/queues');
+
+  const couponsQueue = app.get<Queue>('BullQueue_coupons');
+
+  createBullBoard({ queues: [new BullAdapter(couponsQueue)], serverAdapter: serverAdapter });
+
+  app.use('/queues', serverAdapter.getRouter());
 
   await app.listen(PORT);
 }
