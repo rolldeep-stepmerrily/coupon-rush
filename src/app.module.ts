@@ -1,11 +1,11 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import Joi from 'joi';
+import { BullModule } from '@nestjs/bull';
 
 import { PrismaModule } from './prisma/prisma.module';
 import { HttpLoggerMiddleware } from './common/middlewares';
-import { CouponModule } from './coupon/coupon.module';
-import { BullModule } from '@nestjs/bull';
+import { CouponsModule } from './coupons/coupons.module';
 
 @Module({
   imports: [
@@ -22,7 +22,6 @@ import { BullModule } from '@nestjs/bull';
       validationOptions: { abortEarly: true },
     }),
     PrismaModule,
-    CouponModule,
     BullModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -34,6 +33,7 @@ import { BullModule } from '@nestjs/bull';
       }),
       inject: [ConfigService],
     }),
+    CouponsModule,
   ],
 })
 export class AppModule implements NestModule {
