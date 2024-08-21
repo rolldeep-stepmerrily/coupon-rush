@@ -6,3 +6,27 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        Int       @id @default(autoincrement())
+  username  String    @unique
+  password  String
+  email     String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  coupons Coupon[]
+}
+
+model Coupon {
+  id        String    @id @default(uuid(7))
+  code      String    @unique
+  userId    Int?
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  User User? @relation(fields: [userId], references: [id])
+}
