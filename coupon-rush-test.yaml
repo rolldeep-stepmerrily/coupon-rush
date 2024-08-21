@@ -8,9 +8,12 @@ config:
       Content-Type: 'application/json'
   processor: './reset-coupon.ts'
 
+before:
+  flow:
+    - function: 'resetCouponCount'
+
 scenarios:
   - name: 'issue coupon test'
-    beforeScenario: 'resetCoupon'
     flow:
       - post:
           url: '/coupons/issue'

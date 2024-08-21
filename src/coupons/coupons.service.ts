@@ -1,4 +1,11 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  GoneException,
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 import { Redis } from 'ioredis';
@@ -20,12 +27,23 @@ export class CouponsService {
   }
 
   async issue(userId: number) {
+    const jobs = await this.couponsQueue.getJobs(['waiting', 'active', 'delayed']);
+    const isExist = jobs.some((job) => {
+      if (job?.data?.userId) {
+        return job.data.userId === userId;
+      }
+    });
+
+    if (isExist) {
+      throw new ConflictException('발급 요청 중입니다.');
+    }
+
     const count = await this.redis.incr('count');
 
     if (count > this.COUPON_LIMIT) {
       await this.redis.decr('count');
 
-      throw new BadRequestException('마감되었습니다.');
+      throw new GoneException('마감되었습니다.');
     }
 
     await this.couponsQueue.add('issue', { userId }, { attempts: 3 });
@@ -36,30 +54,23 @@ export class CouponsService {
   async processIssuance(userId: number) {
     const count = await this.redis.get('count');
 
-    if (parseInt(count ?? '0') > this.COUPON_LIMIT) {
+    if (!count) {
+      throw new InternalServerErrorException();
+    }
+
+    if (parseInt(count) > this.COUPON_LIMIT) {
       throw new BadRequestException('마감되었습니다.');
     }
 
-    const coupon = await this.couponsRepository.createCoupon(userId);
-
-    if (!coupon) {
-      await this.redis.decr('count');
-
-      throw new BadRequestException('쿠폰 발급에 실패하였습니다.');
-    }
-
-    return coupon;
+    return await this.couponsRepository.createCoupon(userId);
   }
 
   async resetCouponCount() {
-    await this.redis.flushdb();
-
-    await this.couponsRepository.deleteAllCoupons();
-
-    await this.redis.set('count', 0);
-
-    await this.couponsQueue.empty();
-
-    await this.couponsQueue.clean(0, 'completed');
+    return await Promise.all([
+      this.redis.flushdb(),
+      this.couponsRepository.deleteAllCoupons(),
+      this.redis.set('count', 0),
+      this.couponsQueue.empty(),
+    ]);
   }
 }

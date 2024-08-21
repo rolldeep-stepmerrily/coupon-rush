@@ -7,6 +7,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { HttpLoggerMiddleware } from './common/middlewares';
 import { CouponsModule } from './coupons/coupons.module';
 import { RedisModule } from './redis/redis.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { RedisModule } from './redis/redis.module';
     }),
     CouponsModule,
     RedisModule,
+    UsersModule,
   ],
 })
 export class AppModule implements NestModule {
