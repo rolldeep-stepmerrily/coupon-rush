@@ -38,9 +38,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('NestJS Coupon Rush API')
-    .setDescription('선착순 500명 쿠폰 발급!!!')
-    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'accessToken')
-    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'refreshToken')
+    .setDescription('선착순 500명 쿠폰 발급! (테스트 코드만 존재합니다!)')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
@@ -55,6 +53,7 @@ async function bootstrap() {
   });
 
   const serverAdapter = new ExpressAdapter();
+
   serverAdapter.setBasePath('/queues');
 
   const couponsQueue = app.get<Queue>('BullQueue_coupons');

@@ -1,0 +1,16 @@
+config:
+  target: 'http://localhost:3000'
+  phases:
+    - duration: 1
+      arrivalCount: 5000
+  defaults:
+    headers:
+      Content-Type: 'application/json'
+
+scenarios:
+  - name: 'issue coupon test'
+    flow:
+      - post:
+          url: '/coupons/issue'
+          json:
+            userId: '{{ $randomNumber(1, 5000) }}'

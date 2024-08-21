@@ -21,7 +21,7 @@ export class CouponsService {
     if (count > this.COUPON_LIMIT) {
       await this.redis.decr('count');
 
-      throw new BadRequestException('마감되었습니다. 1');
+      throw new BadRequestException('마감되었습니다.');
     }
 
     await this.couponsQueue.add('issue', { userId }, { attempts: 3 });
@@ -33,7 +33,7 @@ export class CouponsService {
     const count = await this.redis.get('count');
 
     if (parseInt(count ?? '0') > this.COUPON_LIMIT) {
-      throw new BadRequestException('마감되었습니다. 2');
+      throw new BadRequestException('마감되었습니다.');
     }
 
     const coupon = await this.couponsRepository.createCoupon(userId);
@@ -53,5 +53,9 @@ export class CouponsService {
     await this.couponsRepository.deleteAllCoupons();
 
     await this.redis.set('count', 0);
+
+    await this.couponsQueue.empty();
+
+    await this.couponsQueue.clean(0, 'completed');
   }
 }
