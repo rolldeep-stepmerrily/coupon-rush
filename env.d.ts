@@ -4,5 +4,8 @@ declare namespace NodeJS {
     NODE_ENV: string;
     PORT: number;
     DATABASE_URL: string;
+    REDIS_HOST: string;
+    REDIS_PASSWORD: string;
+    REDIS_PORT: number;
   }
 }
