@@ -1,11 +1,4 @@
-import {
-  BadRequestException,
-  ConflictException,
-  GoneException,
-  Inject,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { ConflictException, GoneException, Inject, Injectable } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 import { Redis } from 'ioredis';
@@ -52,16 +45,6 @@ export class CouponsService {
   }
 
   async processIssuance(userId: number) {
-    const count = await this.redis.get('count');
-
-    if (!count) {
-      throw new InternalServerErrorException();
-    }
-
-    if (parseInt(count) > this.COUPON_LIMIT) {
-      throw new BadRequestException('마감되었습니다.');
-    }
-
     return await this.couponsRepository.createCoupon(userId);
   }
 

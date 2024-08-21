@@ -25,7 +25,7 @@ export class UsersService {
     for (let i = 0; i < users.length; i += 500) {
       const batch: IUser[] = users.slice(i, i + 500);
 
-      return await this.usersRepository.createUsers(batch);
+      await this.usersRepository.createUsers(batch);
     }
   }
 
