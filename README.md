@@ -1,6 +1,4 @@
 ## Description
-선착순 500명 쿠폰 발급 테스트 프로젝트 ㅇㅅㅇ
+선착순 500명 쿠폰 발급 테스트 ㅇㅅㅇ
   
 artillery 테스트 시나리오는 coupon-rush-test.yaml 파일 참고!
-  
-npm run test

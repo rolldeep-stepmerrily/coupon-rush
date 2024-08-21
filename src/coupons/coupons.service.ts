@@ -2,18 +2,22 @@ import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 import { Redis } from 'ioredis';
+import path from 'path';
 
 import { CouponsRepository } from './coupons.repository';
 
 @Injectable()
 export class CouponsService {
+  private readonly filePath: string;
   private readonly COUPON_LIMIT = 500;
 
   constructor(
     private readonly couponsRepository: CouponsRepository,
     @InjectQueue('coupons') private couponsQueue: Queue,
     @Inject('REDIS') private readonly redis: Redis,
-  ) {}
+  ) {
+    this.filePath = path.join(process.cwd(), '.userIds');
+  }
 
   async issue(userId: number) {
     const count = await this.redis.incr('count');

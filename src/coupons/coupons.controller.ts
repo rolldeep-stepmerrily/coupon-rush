@@ -1,7 +1,5 @@
 import { Controller, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import * as fs from 'fs/promises';
-import path from 'path';
 
 import { CouponsService } from './coupons.service';
 
@@ -14,10 +12,6 @@ export class CouponsController {
   @Post('issue')
   async issue() {
     const randomUserId = Math.floor(Math.random() * 5000) + 1;
-
-    const filePath = path.join(process.cwd(), '.history');
-
-    await fs.appendFile(filePath, `${randomUserId}\n`);
 
     return this.couponsService.issue(randomUserId);
   }

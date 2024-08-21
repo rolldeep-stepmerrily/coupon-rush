@@ -6,9 +6,11 @@ config:
   defaults:
     headers:
       Content-Type: 'application/json'
+  processor: './reset-coupon.ts'
 
 scenarios:
   - name: 'issue coupon test'
+    beforeScenario: 'resetCoupon'
     flow:
       - post:
           url: '/coupons/issue'
