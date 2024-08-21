@@ -10,7 +10,7 @@ config:
 
 before:
   flow:
-    - function: 'resetCouponCount'
+    - function: 'reset'
 
 scenarios:
   - name: 'issue coupon test'

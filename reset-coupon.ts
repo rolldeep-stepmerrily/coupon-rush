@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const resetCouponCount = async () => {
+export const reset = async () => {
   try {
     await axios.post('http://localhost:3000/coupons/reset');
   } catch (e) {
