@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "start:dev": "nest start --watch",
-    "test": "npx artillery run coupon-rush-test.yml -o results.json"
+    "test": "npx artillery run coupon-rush-test.yaml -o results.json"
   },
   "dependencies": {
     "@bull-board/api": "^5.21.4",
