@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { CouponsController } from './coupons.controller';
 
 describe('CouponsController', () => {
