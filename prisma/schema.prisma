@@ -29,3 +29,9 @@ model Coupon {
 
   User User? @relation(fields: [userId], references: [id])
 }
+
+model CouponIssuance {
+  id        Int      @id @default(autoincrement())
+  count     Int      @default(0)
+  updatedAt DateTime @updatedAt
+}
